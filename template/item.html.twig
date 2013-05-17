@@ -1,0 +1,124 @@
+{# item page #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ item.name }}{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="res/css/gridTable.css" />
+<link rel="stylesheet" href="res/css/item.css" />
+{% endblock %}
+{% block js %}
+<script src="res/js/jquery.hoverpulse.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+    $('.confirm').click(function(e) {
+        e.preventDefault();
+        if (window.confirm("Na pewno usunąć?")) {
+            location.href = this.href;
+        }
+    });
+	$('div.thumb img').hoverpulse({
+        size: 150,  // number of pixels to pulse element (in each direction)
+        speed: 400 // speed of the animation 
+	});
+});
+</script>
+{% endblock %}
+{% block body %}
+	<h2>{{ item.name }}</h2>
+	<div style="width: 600px; margin: auto;">
+	{{ item.description|nl2br }}
+	</div>
+	<p>
+	{% for image in item.images %}
+	<img src="res/data/images/{{ image }}" />
+	{% endfor %}
+	</p>
+	<p>Oferty:</p>
+	<p>
+	<div class="thumb">
+	<table class="gridtable" id="itemtable">
+		<tr>
+			<th>Usuń</th>
+			<th>Oferta</th>
+			<th>Klient</th>
+			<th>Image</th>
+			<th>Image</th>
+			<th>Image</th>
+			<th>Image</th>
+			<th>Image</th>
+		</tr>
+	{% for offer in item.offers %}
+		{% if offer.clientId == item.clientId %}
+		<tr>
+			<th>
+				<a class="confirm" href="remove.php?type=offer&id={{ offer.id }}">
+					<button>Usuń</button>
+				</a>
+			</th>
+			<th>{{ offer.description|nl2br }}</th>
+			<th>Sprzedający</th>
+			{% for image in offer.images %}
+			<th style="height: 80px; vertical-align: top;"><img src="res/data/images/{{ image }}" width="80" height="80" /></th>
+			{% endfor %}
+			{% set empty = 5-(images|length) %}
+			{% for i in 0..empty %}<th></th>{% endfor %}
+			
+			
+		</tr>
+		{% endif %}
+	{% endfor %}
+	{% for offer in item.offers %}
+		{% if offer.clientId != item.clientId %}
+		<tr>
+			<td>
+				<a class="confirm" href="remove.php?type=offer&id={{ offer.id }}">
+					<button>Usuń</button>
+				</a>
+			</td>
+			<td>{{ offer.description|nl2br }}</td>
+			<td>{{ offer.clientName }}</td>
+			{% for image in offer.images %}
+				<td style="height: 80px; vertical-align: top;"><img src="res/data/images/{{ image }}" width="80" height="80" /></td>
+			{% endfor %}
+			{% set empty = 5-(images|length) %}
+			{% for i in 0..empty %}<td></td>{% endfor %}
+		</tr>
+		{% endif %}
+	{% endfor %}
+	</table>
+	</div>
+	</p>
+	<p>
+		<a class="confirm" href="remove.php?type=item&id={{ item.id }}">
+			<button>Usuń aukcję</button>
+		</a>
+	</p>
+	
+	<div style="width: 400px; margin: auto;">
+	<table class="gridtable"><tr><th>
+	<form action="addOffer.php" method="post" enctype="multipart/form-data">
+		<p><h2>Złóż ofertę</h2></p>
+		<p>
+		Składający ofertę:<br />
+		<select name="client_id">
+			{% for client in clients %}
+				<option value="{{ client.id }}">{{ client.name }}</option>
+			{% endfor %}
+		</select>
+		</p>
+		Treść oferty:<br />
+		<textarea name="description" style="width: 400px; height: 200px;"></textarea>
+		</p>
+		<p>
+		Zdjęcia:<br />
+		<input type="file" name="0" accept="image/*" /><br />
+		<input type="file" name="1" accept="image/*" /><br />
+		<input type="file" name="2" accept="image/*" /><br />
+		<input type="file" name="3" accept="image/*" /><br />
+		<input type="file" name="4" accept="image/*" />
+		<input type="hidden" name="item_id" value="{{ item.id }}" />
+		</p>
+		<input type="submit" value="Dodaj" />
+	</form>
+	</th></tr></table>
+	</div>
+{% endblock %}

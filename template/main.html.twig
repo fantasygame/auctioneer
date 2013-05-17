@@ -1,0 +1,63 @@
+{# main page #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Aktywne aukcje{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="res/css/gridTable.css" />
+{% endblock %}
+{% block js %}
+<script src="res/js/jquery.hoverpulse.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('div.thumb img').hoverpulse({
+        size: 150,  // number of pixels to pulse element (in each direction)
+        speed: 400 // speed of the animation 
+		});
+	});
+</script>
+{% endblock %}
+{% block body %}
+	<div style="color: white; text-align: center;">
+		<p><a href="addItem.php"><button>Dodaj aukcję</button></a></p>
+	</div>
+	<table class="gridtable" id="itemtable" style="margin-bottom: 150px;">
+		<tr>
+			<th>Zdjęcie</th>
+			<th>Nazwa</th>
+			<th>Cena</th>
+			<th>Ofert</th>
+			<th>Sprzedający</th>
+			<th>Koniec</th>
+		</tr>
+    {% for item in items %}
+        <tr>
+			<td style="height: 80px; vertical-align: top;">
+				<div class="thumb">
+				{% if item.images|length > 0 %}
+					<a href="showItem.php?id={{ item.id }}"><img src="res/data/images/{{ item.images[0] }}" width="80" height="80"/></a>
+				{% endif %}
+				</div>
+			</td>
+			<td style="text-align: center;">
+				<a href="showItem.php?id={{ item.id }}">{{ item.name }}</a>
+			</td>
+			<td style="width:300px; font-size: 10px;">
+				{% for offer in item.offers %}
+					{% if offer.clientId == item.clientId %}
+						{{ offer.description|nl2br }}
+					{% endif %}
+				{% endfor %}
+			</td>
+			<td style="text-align: center;">
+				{{ item.offers|length }}
+			</td>
+			<td style="text-align: center;">
+				{{ item.clientName }}
+			</td>
+			<td style="text-align: center;">
+				{{ item.dueDate }}
+			</td>
+		</tr>
+    {% endfor %}
+	</table>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dodaj aukcję{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="res/css/addItem.css" />
+<link rel="stylesheet" href="res/css/gridTable.css" />
+{% endblock %}
+
+{% block body %}
+<div style="width: 400px; margin: auto;">
+<table class="gridtable"><tr><th>
+<form action="addItem.php" method="post" enctype="multipart/form-data">
+	<p><h2>Dodaj aukcję</h2></p>
+	<p>
+	Sprzedający:<br />
+	<select name="client_id">
+		{% for client in clients %}
+			<option value="{{ client.id }}">{{ client.name }}</option>
+		{% endfor %}
+	</select>
+	</p>
+	<p>
+	Tytuł:<br />
+	<input type="text" name="name" />
+	</p>
+	<p>
+	Opis:<br />
+	<textarea name="description" style="width: 400px; height: 200px;"></textarea>
+	</p>
+	<p>
+	Czas trwania:<br />
+	<select name="duration">
+		<option value="1" selected="selected">1 dzień</option>
+		<option value="2">2 dni</option>
+		<option value="5">5 dni</option>
+		<option value="7">7 dni</option>
+		<option value="14">14 dni</option>
+	</select>
+	</p>
+	<p>
+	Zdjęcia:<br />
+	<input type="file" name="0" accept="image/*" /><br />
+	<input type="file" name="1" accept="image/*" /><br />
+	<input type="file" name="2" accept="image/*" /><br />
+	<input type="file" name="3" accept="image/*" /><br />
+	<input type="file" name="4" accept="image/*" />
+	</p>
+	<input type="submit" value="Dodaj" />
+</form>
+</th></tr></table>
+</div>
+{% endblock %}
