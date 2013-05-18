@@ -7,7 +7,9 @@
  */
 class MySql extends mysqli
 {
-
+	private $dbhost = 'localhost';
+	private $dbuser = 'user';
+	private $dbpassword = 'password';
 	private $lastQuery;
 
 	public function __construct($host = null, $user = null, $password = null, $database = null)
@@ -19,8 +21,7 @@ class MySql extends mysqli
 				$this->connect($host, $user, $password);
 			}
 		} else {
-			require 'db.php';
-			$this->connect($dbhost, $dbuser, $dbpassword);
+			$this->connect($this->dbhost, $this->dbuser, $this->dbpassword);
 		}
 		$this->query('SET character_set_connection=utf8');
 		$this->query('SET character_set_client=utf8');

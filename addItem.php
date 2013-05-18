@@ -29,7 +29,9 @@ if (isset($_POST['name'])) {
 	}
 	$r['images'] = serialize($images);
 	$id = $databaseManager->addItem($databaseManager->createItem($r));
-	header('Location: showItem.php?id=' . $id);
+	if ($id != false) {
+		header('Location: showItem.php?id=' . $id);
+	}
 }
 require_once 'res/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();

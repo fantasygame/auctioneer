@@ -41,6 +41,21 @@ class DatabaseManager
 
 	public function addItem(Item $item)
 	{
+		$date = date('Y-m-d H:i:s');
+		$query = "
+		SELECT count(`id`) as count
+		FROM `item`
+		WHERE
+		`client_id` = '{$item->getClientId()}'
+		AND `due_date` > '$date'
+		AND `active` = '1'
+		";
+		$result = $this->mysql->select($query);
+		$count = $result[0]['count'];
+		if($count > 10) {
+			echo 'Przekroczono maksimum aukcji';
+			return false;
+		}
 		$query = "
 		INSERT INTO `item` (
 		`id` ,
