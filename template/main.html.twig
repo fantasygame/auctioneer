@@ -24,7 +24,7 @@
 		<tr>
 			<th>Zdjęcie</th>
 			<th>Nazwa</th>
-			<th>Cena</th>
+			<th>Opis</th>
 			<th>Ofert</th>
 			<th>Sprzedający</th>
 			<th>Koniec</th>
@@ -42,9 +42,10 @@
 				<a href="showItem.php?id={{ item.id }}">{{ item.name }}</a>
 			</td>
 			<td style="width:300px; font-size: 10px;">
+				{{ item.description|nl2br }}
 				{% for offer in item.offers %}
 					{% if offer.clientId == item.clientId %}
-						{{ offer.description|nl2br }}
+						<p>Oferta sprzedającego:<br /> {{ offer.description|nl2br }}</p>
 					{% endif %}
 				{% endfor %}
 			</td>
